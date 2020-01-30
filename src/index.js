@@ -1,6 +1,7 @@
 console.log('%c HI', 'color: firebrick')
 
 /* JSON fetch functions */
+let breeds = [];
 const imgUrl = "https://dog.ceo/api/breeds/image/random/4"
 const breedUrl = 'https://dog.ceo/api/breeds/list/all'
 
@@ -28,6 +29,7 @@ function getBreeds() {
 
 const dogImgContainer = document.querySelector("#dog-image-container");
 const dogList = document.querySelector("#dog-breeds");
+const breedDropdown = document.querySelector("#breed-dropdown")
 
 function postImages(json) {
   json.message.forEach(function(element) {
@@ -56,9 +58,37 @@ function postBreeds(json) {
     dogLi = document.createElement('li');
     dogLi.textContent = breed;
     dogLi.addEventListener("click", dogClicker)
+    // while (dogList.firstChild) {
+    //   dogList.removeChild(dogList.firstChild)
+    // }
     dogList.append(dogLi);
   });
 };
 
 getImages()
 getBreeds()
+
+/* listeners */
+
+breedDropdown.addEventListener("change", handleDropdown)
+
+function handleDropdown(event) {
+  const firstLetter = event.target.value;
+  
+  filteredBreeds = breeds.filter(function(breed) {
+    return breed.startsWith(firstLetter);
+  });
+  renderDogs(filteredBreeds);
+}
+
+function renderDogs(dogs) {
+  while (dogList.firstChild) {
+    dogList.removeChild(dogList.firstChild)
+  }
+  dogs.forEach(function(dog) {
+    dogLi = document.createElement('li');
+    dogLi.textContent = dog;
+    dogLi.addEventListener("click", dogClicker)
+    dogList.append(dogLi);
+  });
+}
